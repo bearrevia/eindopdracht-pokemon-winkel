@@ -1,6 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api.api import router as api_router
+import uvicorn
+import os
+import dotenv
+import asyncio
 
 app = FastAPI()
 
