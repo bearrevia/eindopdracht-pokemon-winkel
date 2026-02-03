@@ -45,7 +45,3 @@ async def test_database():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Database verbinding mislukt: {str(e)}")
 
-@router.get("/health")
-async def health_check():
-    """Simpele health check"""
-    return {"status": "ok", "message": "API is running"}

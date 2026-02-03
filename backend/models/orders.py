@@ -3,7 +3,8 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
 from datetime import datetime
 
-from models.user import Base
+from models import Base
+
 
 class Order(Base):
     __tablename__ = "orders"
@@ -18,6 +19,7 @@ class Order(Base):
         UUID(as_uuid=True),
         ForeignKey("users.id", ondelete="CASCADE"),
         nullable=False,
+        index=True,
     )
     status = Column(String, nullable=False, default="pending")
     total_amount = Column(Float, nullable=False, default=0.0)
@@ -41,11 +43,13 @@ class OrderItem(Base):
         UUID(as_uuid=True),
         ForeignKey("orders.id", ondelete="CASCADE"),
         nullable=False,
+        index=True,
     )
     item_id = Column(
         UUID(as_uuid=True),
         ForeignKey("items.id", ondelete="SET NULL"),
         nullable=True,
+        index=True,
     )
     product_name = Column(String, nullable=False)
     product_price = Column(Float, nullable=False)
