@@ -2,7 +2,7 @@ from sqlalchemy import Column, String, Integer, Float, Boolean, DateTime, text
 from sqlalchemy.dialects.postgresql import UUID
 from datetime import datetime
 
-from models.user import Base
+from models import Base
 
 
 class Item(Base):
@@ -18,7 +18,7 @@ class Item(Base):
     description = Column(String, nullable=True)
     price = Column(Float, nullable=False)
     image_url = Column(String, nullable=True)
-    category = Column(String, nullable=True, index=True)  # bijv. "plush", "clothing", "accessories"
+    category = Column(String, nullable=True, index=True)
     stock = Column(Integer, nullable=False, default=0)
     is_active = Column(Boolean, nullable=False, default=True)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)

@@ -5,37 +5,28 @@ from sqlalchemy import pool
 
 from alembic import context
 
-# Load environment variables
 import os
+import sys
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
 
-# this is the Alembic Config object, which provides
-# access to the values within the .ini file in use.
-config = context.config
+# Voeg backend folder toe aan path
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-# Set the database URL from environment
+config = context.config
 config.set_main_option('sqlalchemy.url', os.getenv('ALEMBIC_DATABASE_URL'))
 
-# Interpret the config file for Python logging.
-# This line sets up loggers basically.
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# add your model's MetaData object here
-# for 'autogenerate' support
-import sys
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+# Importeer Base eerst
+from models import Base
 
-# Importeer alle models
+# Importeer models apart (zorgt dat ze geregistreerd worden bij Base)
 from models.user import User
 from models.items import Item
 from models.orders import Order, OrderItem
-
-# Importeer Base van een van de models (ze delen allemaal dezelfde Base)
-from models.user import Base
 
 target_metadata = Base.metadata
 
