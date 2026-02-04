@@ -15,21 +15,9 @@ const products: Product[] = [
     { id: 4, name: "Bulbasaur Backpack", price: "€24.99", description: "Handige rugzak met Bulbasaur" },
 ];
 
-const Webshop: React.FC = () => {
+export default function Webshop() {
     return (
-        <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
-            {/* Navbar */}
-            <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-200">
-                <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-                    <h1 className="text-2xl font-bold text-yellow-500">PokéShop</h1>
-                    <nav className="flex gap-6">
-                        <a href="#" className="text-gray-600 hover:text-gray-900 font-medium">Home</a>
-                        <a href="#products" className="text-gray-600 hover:text-gray-900 font-medium">Producten</a>
-                        <a href="#contact" className="text-gray-600 hover:text-gray-900 font-medium">Contact</a>
-                    </nav>
-                </div>
-            </header>
-
+        <>
             {/* Hero Section met gradient */}
             <section className="relative h-screen w-full flex items-center justify-center bg-gradient-to-br from-blue-600 via-purple-600 to-yellow-400">
                 <div className="absolute inset-0 bg-black/30"></div>
@@ -93,8 +81,6 @@ const Webshop: React.FC = () => {
                     </p>
                 </div>
             </footer>
-        </div>
+        </>
     );
-};
-
-export default Webshop;
+}
