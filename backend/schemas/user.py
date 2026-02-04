@@ -31,6 +31,7 @@ class UserResponse(BaseModel):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     is_active: Optional[bool] = None
+    is_admin: bool = False
 
     class Config:
         from_attributes = True

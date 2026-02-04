@@ -20,5 +20,6 @@ class User(Base):
     first_name = Column(String, nullable=True)
     last_name = Column(String, nullable=True)
     is_active = Column(Boolean, nullable=True, default=True)
+    is_admin = Column(Boolean, nullable=False, default=False)
 
     orders = relationship("Order", back_populates="user", cascade="all, delete-orphan")
