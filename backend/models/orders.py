@@ -23,6 +23,14 @@ class Order(Base):
     )
     status = Column(String, nullable=False, default="pending")
     total_amount = Column(Float, nullable=False, default=0.0)
+    
+    # Adresgegevens
+    street = Column(String, nullable=False)
+    house_number = Column(String, nullable=False)
+    postal_code = Column(String, nullable=False)
+    city = Column(String, nullable=False)
+    country = Column(String, nullable=False, default="Nederland")
+    
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
     updated_at = Column(DateTime, nullable=True, onupdate=datetime.utcnow)
 

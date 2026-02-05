@@ -1,5 +1,6 @@
-import { Link } from "react-router-dom";
-import { CartItem, User } from "../src/App";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import type { CartItem, User, AddressForm } from "../src/types";
 
 interface CartProps {
   cart: CartItem[];
@@ -18,15 +19,74 @@ export default function Cart({
   cartTotal,
   user,
 }: CartProps) {
-  const handleCheckout = async () => {
+  const navigate = useNavigate();
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [address, setAddress] = useState<AddressForm>({
+    street: "",
+    house_number: "",
+    postal_code: "",
+    city: "",
+    country: "Nederland",
+  });
+
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setAddress((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleCheckout = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
     if (!user) {
       alert("Je moet ingelogd zijn om te bestellen");
       return;
     }
 
-    // Hier kun je later de order API aanroepen
-    alert("Bestelling geplaatst! (Demo)");
-    clearCart();
+    // Valideer adres
+    if (!address.street || !address.house_number || !address.postal_code || !address.city) {
+      setError("Vul alle adresvelden in");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const token = localStorage.getItem("token");
+      const orderData = {
+        items: cart.map((item) => ({
+          item_id: item.id,
+          product_name: item.name,
+          product_price: item.price,
+          quantity: item.quantity,
+        })),
+        address: address,
+      };
+
+      const response = await fetch("http://127.0.0.1:8000/api/orders/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Kon bestelling niet plaatsen");
+      }
+
+      clearCart();
+      alert("Bestelling succesvol geplaatst!");
+      navigate("/orders");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Er is een fout opgetreden");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (cart.length === 0) {
@@ -122,22 +182,24 @@ export default function Cart({
             <span className="text-xl font-bold">€{cartTotal.toFixed(2)}</span>
           </div>
 
-          <div className="flex space-x-4">
-            <button
-              onClick={clearCart}
-              className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 rounded-lg transition-colors"
-            >
-              Wagen legen
-            </button>
-            <button
-              onClick={handleCheckout}
-              className="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium py-3 rounded-lg transition-colors"
-            >
-              {user ? "Bestellen" : "Log in om te bestellen"}
-            </button>
-          </div>
+          {!showCheckout ? (
+            <div className="flex space-x-4">
+              <button
+                onClick={clearCart}
+                className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 rounded-lg transition-colors"
+              >
+                Wagen legen
+              </button>
+              <button
+                onClick={() => user ? setShowCheckout(true) : alert("Log in om te bestellen")}
+                className="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium py-3 rounded-lg transition-colors"
+              >
+                {user ? "Naar afrekenen" : "Log in om te bestellen"}
+              </button>
+            </div>
+          ) : null}
 
-          {!user && (
+          {!user && !showCheckout && (
             <p className="text-center text-sm text-gray-500 mt-4">
               <Link to="/login" className="text-blue-600 hover:underline">
                 Log in
@@ -151,6 +213,127 @@ export default function Cart({
           )}
         </div>
       </div>
+
+      {/* Checkout Form */}
+      {showCheckout && user && (
+        <div className="mt-8 bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Bezorgadres</h2>
+
+          {error && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleCheckout} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="street" className="block text-sm font-medium text-gray-700 mb-1">
+                  Straatnaam *
+                </label>
+                <input
+                  type="text"
+                  id="street"
+                  name="street"
+                  value={address.street}
+                  onChange={handleAddressChange}
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Bijv. Hoofdstraat"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="house_number" className="block text-sm font-medium text-gray-700 mb-1">
+                  Huisnummer *
+                </label>
+                <input
+                  type="text"
+                  id="house_number"
+                  name="house_number"
+                  value={address.house_number}
+                  onChange={handleAddressChange}
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Bijv. 123A"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="postal_code" className="block text-sm font-medium text-gray-700 mb-1">
+                  Postcode *
+                </label>
+                <input
+                  type="text"
+                  id="postal_code"
+                  name="postal_code"
+                  value={address.postal_code}
+                  onChange={handleAddressChange}
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Bijv. 1234 AB"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
+                  Plaats *
+                </label>
+                <input
+                  type="text"
+                  id="city"
+                  name="city"
+                  value={address.city}
+                  onChange={handleAddressChange}
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Bijv. Amsterdam"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">
+                Land
+              </label>
+              <input
+                type="text"
+                id="country"
+                name="country"
+                value={address.country}
+                onChange={handleAddressChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div className="border-t pt-4 mt-6">
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-lg font-semibold">Totaal te betalen:</span>
+                <span className="text-2xl font-bold text-green-600">€{cartTotal.toFixed(2)}</span>
+              </div>
+
+              <div className="flex space-x-4">
+                <button
+                  type="button"
+                  onClick={() => setShowCheckout(false)}
+                  className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 rounded-lg transition-colors"
+                >
+                  Terug
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-medium py-3 rounded-lg transition-colors"
+                >
+                  {loading ? "Bestelling plaatsen..." : "Bestelling plaatsen"}
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      )}
 
       {/* Continue Shopping */}
       <div className="mt-6 text-center">

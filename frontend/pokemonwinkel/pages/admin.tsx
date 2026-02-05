@@ -1,17 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { User } from "../src/App";
-
-interface Item {
-  id: string;
-  name: string;
-  description: string | null;
-  price: number;
-  image_url: string | null;
-  category: string | null;
-  stock: number;
-  is_active: boolean;
-}
+import type { User, Item } from "../src/types";
 
 interface AdminPanelProps {
   user: User | null;

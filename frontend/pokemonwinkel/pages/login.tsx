@@ -1,14 +1,9 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { User } from "../src/App";
+import type { User, LoginForm } from "../src/types";
 
 interface LoginProps {
   onLogin: (user: User, token: string) => void;
-}
-
-interface LoginForm {
-  email: string;
-  password: string;
 }
 
 export default function Login({ onLogin }: LoginProps) {

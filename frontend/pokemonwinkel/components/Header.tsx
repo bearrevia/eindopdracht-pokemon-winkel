@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { User } from "../src/App";
+import type { User } from "../src/types";
 
 interface HeaderProps {
   user: User | null;
@@ -31,6 +31,12 @@ export default function Header({ user, onLogout, cartItemCount }: HeaderProps) {
 
           {user ? (
             <div className="flex items-center space-x-4">
+              <Link
+                to="/orders"
+                className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-md text-sm font-medium transition-colors"
+              >
+                Mijn Bestellingen
+              </Link>
               {user.is_admin && (
                 <Link
                   to="/admin"

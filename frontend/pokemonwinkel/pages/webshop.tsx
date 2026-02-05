@@ -1,16 +1,5 @@
 import { useState, useEffect } from "react";
-import { CartItem } from "../src/App";
-
-interface Item {
-  id: string;
-  name: string;
-  description: string | null;
-  price: number;
-  image_url: string | null;
-  category: string | null;
-  stock: number;
-  is_active: boolean;
-}
+import type { CartItem, Item } from "../src/types";
 
 interface WebshopProps {
   addToCart: (item: Omit<CartItem, "quantity">) => void;
@@ -55,21 +44,27 @@ export default function Webshop({ addToCart }: WebshopProps) {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative h-96 w-full flex items-center justify-center bg-gradient-to-br from-blue-600 via-purple-600 to-yellow-400">
+      <section className="relative h-[85vh] w-full flex items-center justify-center bg-gradient-to-br from-blue-600 via-purple-600 to-yellow-400">
         <div className="absolute inset-0 bg-black/30"></div>
         <div className="relative z-10 text-center text-white px-6">
-          <h2 className="text-5xl md:text-7xl font-extrabold mb-4 drop-shadow-lg">
+          <h2 className="text-6xl md:text-8xl font-extrabold mb-6 drop-shadow-lg">
             Welkom bij PokéShop
           </h2>
-          <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto drop-shadow-md">
+          <p className="text-2xl md:text-3xl mb-10 max-w-3xl mx-auto drop-shadow-md">
             Ontdek de beste Pokémon-merchandise: knuffels, kleding en accessoires.
           </p>
           <a
             href="#products"
-            className="inline-block bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold px-8 py-4 rounded-full text-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="inline-block bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold px-10 py-5 rounded-full text-xl transition-all duration-300 shadow-lg hover:shadow-xl"
           >
             Bekijk producten
           </a>
+        </div>
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          </svg>
         </div>
       </section>
 

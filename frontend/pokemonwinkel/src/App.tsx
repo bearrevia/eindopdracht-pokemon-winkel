@@ -5,25 +5,10 @@ import Register from "../pages/register";
 import Login from "../pages/login";
 import AdminPanel from "../pages/admin";
 import Cart from "../pages/cart";
+import Orders from "../pages/orders";
 import Header from "../components/Header";
 import "./App.css";
-
-export interface User {
-  id: string;
-  email: string;
-  first_name: string | null;
-  last_name: string | null;
-  is_active: boolean | null;
-  is_admin: boolean;
-}
-
-export interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  image_url: string | null;
-}
+import type { User, CartItem } from "./types";
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -104,6 +89,7 @@ function App() {
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<AdminPanel user={user} />} />
+          <Route path="/orders" element={<Orders user={user} />} />
           <Route
             path="/cart"
             element={
