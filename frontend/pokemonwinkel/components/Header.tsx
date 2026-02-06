@@ -11,8 +11,8 @@ export default function Header({ user, onLogout, cartItemCount }: HeaderProps) {
   return (
     <header className="bg-blue-600 text-white shadow-lg sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold hover:text-blue-200">
-          🎮 Pokemon Winkel
+        <Link to="/" className="hover:opacity-90 transition-opacity">
+          <img src="/pokeshop-logo.svg" alt="PokéShop" className="h-10" />
         </Link>
 
         <div className="flex items-center space-x-4">
@@ -33,14 +33,14 @@ export default function Header({ user, onLogout, cartItemCount }: HeaderProps) {
             <div className="flex items-center space-x-4">
               <Link
                 to="/orders"
-                className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 px-4 py-2 rounded-md text-sm font-medium transition-colors"
               >
                 Mijn Bestellingen
               </Link>
               {user.is_admin && (
                 <Link
                   to="/admin"
-                  className="bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                  className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 px-4 py-2 rounded-md text-sm font-medium transition-colors"
                 >
                   Admin Panel
                 </Link>
@@ -50,26 +50,18 @@ export default function Header({ user, onLogout, cartItemCount }: HeaderProps) {
               </span>
               <button
                 onClick={onLogout}
-                className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 px-4 py-2 rounded-md text-sm font-medium transition-colors"
               >
                 Uitloggen
               </button>
             </div>
           ) : (
-            <div className="flex flex-col items-end">
-              <Link
-                to="/login"
-                className="bg-white text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-md text-sm font-medium transition-colors"
-              >
-                Inloggen
-              </Link>
-              <Link
-                to="/register"
-                className="text-xs text-blue-200 hover:text-white mt-1"
-              >
-                Nog geen account? Registreer hier
-              </Link>
-            </div>
+            <Link
+              to="/login"
+              className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 px-4 py-2 rounded-md text-sm font-medium transition-colors"
+            >
+              Inloggen
+            </Link>
           )}
         </div>
       </div>

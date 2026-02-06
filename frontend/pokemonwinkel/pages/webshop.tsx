@@ -44,7 +44,7 @@ export default function Webshop({ addToCart }: WebshopProps) {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative h-[85vh] w-full flex items-center justify-center bg-gradient-to-br from-blue-600 via-purple-600 to-yellow-400">
+      <section className="relative h-[85vh] w-full flex items-center justify-center bg-gradient-to-b from-blue-600 via-blue-500 to-yellow-400">
         <div className="absolute inset-0 bg-black/30"></div>
         <div className="relative z-10 text-center text-white px-6">
           <h2 className="text-6xl md:text-8xl font-extrabold mb-6 drop-shadow-lg">
@@ -53,12 +53,12 @@ export default function Webshop({ addToCart }: WebshopProps) {
           <p className="text-2xl md:text-3xl mb-10 max-w-3xl mx-auto drop-shadow-md">
             Ontdek de beste Pokémon-merchandise: knuffels, kleding en accessoires.
           </p>
-          <a
-            href="#products"
-            className="inline-block bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold px-10 py-5 rounded-full text-xl transition-all duration-300 shadow-lg hover:shadow-xl"
+          <button
+            onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}
+            className="inline-block bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold px-10 py-5 rounded-full text-xl transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer"
           >
             Bekijk producten
-          </a>
+          </button>
         </div>
         {/* Scroll indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
@@ -122,7 +122,7 @@ export default function Webshop({ addToCart }: WebshopProps) {
                           ? "bg-green-500 text-white"
                           : item.stock === 0
                           ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                          : "bg-blue-600 hover:bg-blue-500 text-white"
+                          : "bg-yellow-400 hover:bg-yellow-300 text-gray-900"
                       }`}
                     >
                       {addedItemId === item.id

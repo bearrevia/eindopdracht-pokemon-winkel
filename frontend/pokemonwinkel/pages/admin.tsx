@@ -121,7 +121,7 @@ export default function AdminPanel({ user }: AdminPanelProps) {
       {/* Nieuw item toevoegen knop */}
       <button
         onClick={() => setShowForm(!showForm)}
-        className="mb-6 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md font-medium transition-colors"
+        className="mb-6 bg-yellow-400 hover:bg-yellow-300 text-gray-900 px-6 py-2 rounded-md font-medium transition-colors"
       >
         {showForm ? "Annuleren" : "+ Nieuw Item"}
       </button>
@@ -206,7 +206,7 @@ export default function AdminPanel({ user }: AdminPanelProps) {
 
           <button
             type="submit"
-            className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-medium transition-colors"
+            className="mt-4 bg-yellow-400 hover:bg-yellow-300 text-gray-900 px-6 py-2 rounded-md font-medium transition-colors"
           >
             Item Toevoegen
           </button>

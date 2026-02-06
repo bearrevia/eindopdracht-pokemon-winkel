@@ -21,6 +21,7 @@ export default function Cart({
 }: CartProps) {
   const navigate = useNavigate();
   const [showCheckout, setShowCheckout] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [address, setAddress] = useState<AddressForm>({
@@ -79,10 +80,12 @@ export default function Cart({
         throw new Error(errorData.detail || "Kon bestelling niet plaatsen");
       }
 
+      console.log("Bestelling succesvol, popup tonen");
       clearCart();
-      alert("Bestelling succesvol geplaatst!");
-      navigate("/orders");
+      setShowCheckout(false);
+      setShowSuccessPopup(true);
     } catch (err) {
+      console.error("Fout bij bestelling:", err);
       setError(err instanceof Error ? err.message : "Er is een fout opgetreden");
     } finally {
       setLoading(false);
@@ -100,7 +103,7 @@ export default function Cart({
         </p>
         <Link
           to="/"
-          className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg transition-colors"
+          className="inline-block bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-medium px-6 py-3 rounded-lg transition-colors"
         >
           Bekijk producten
         </Link>
@@ -110,6 +113,39 @@ export default function Cart({
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
+      {/* Success Popup */}
+      {showSuccessPopup && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md mx-4 text-center transform animate-bounce-in">
+            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg className="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">
+              Bedankt voor je bestelling! 🎉
+            </h2>
+            <p className="text-gray-600 mb-6">
+              Je bestelling is succesvol geplaatst. Je kunt de status bekijken bij je bestellingen.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={() => navigate("/orders")}
+                className="flex-1 bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-medium py-3 px-6 rounded-lg transition-colors"
+              >
+                Bekijk bestellingen
+              </button>
+              <button
+                onClick={() => navigate("/")}
+                className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 px-6 rounded-lg transition-colors"
+              >
+                Verder winkelen
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <h1 className="text-3xl font-bold text-gray-800 mb-8">Winkelwagen</h1>
 
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -192,7 +228,7 @@ export default function Cart({
               </button>
               <button
                 onClick={() => user ? setShowCheckout(true) : alert("Log in om te bestellen")}
-                className="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium py-3 rounded-lg transition-colors"
+                className="flex-1 bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-medium py-3 rounded-lg transition-colors"
               >
                 {user ? "Naar afrekenen" : "Log in om te bestellen"}
               </button>
@@ -325,7 +361,7 @@ export default function Cart({
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-medium py-3 rounded-lg transition-colors"
+                  className="flex-1 bg-yellow-400 hover:bg-yellow-300 disabled:bg-yellow-200 text-gray-900 font-medium py-3 rounded-lg transition-colors"
                 >
                   {loading ? "Bestelling plaatsen..." : "Bestelling plaatsen"}
                 </button>

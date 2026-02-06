@@ -109,7 +109,7 @@ export default function Orders({ user }: OrdersProps) {
           <p className="text-gray-500 mb-4">Je hebt nog geen bestellingen geplaatst</p>
           <Link
             to="/"
-            className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg transition-colors"
+            className="inline-block bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-medium px-6 py-3 rounded-lg transition-colors"
           >
             Begin met winkelen
           </Link>
